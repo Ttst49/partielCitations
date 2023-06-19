@@ -69,11 +69,16 @@ class CitationController extends AbstractController
 
 
     #[Route("/user/remove/{id},",name: "app_citation_removefavorite")]
-    public function removeFavorite(Quote $quote, EntityManagerInterface $manager):Response{
+    #[Route("/user/remove/{id},",name: "app_citation_removefavoritefrombest")]
+    public function removeFavorite(Quote $quote, EntityManagerInterface $manager, Request $request):Response{
 
         $this->getUser()->removeQuote($quote);
         $quote->setCounter($quote->getCounter()-1);
         $manager->flush();
+
+        if ($request->get("_route") == "app_citation_removefavoritefrombest"){
+            return $this->redirectToRoute("app_citation_showbestquotes");
+        }
 
 
         return $this->redirectToRoute("app_citation_indexfavorites");

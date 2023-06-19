@@ -11,7 +11,11 @@
    <input type="hidden" name="quote" value="{{ quote.content }}">
    <input type="hidden" name="character" value="{{ quote.character }}">
    {% if app.user %}
+    {% if quote  in app.user.quotes  %}
+     <a href="{{ path('app_citation_removefavoritefrombest',{id:quote.id}) }}" type="submit" class="mt-5 btn btn-danger">Supprimer cette citation</a>
+     {% else %}
     <button type="submit"  class="mt-5 btn btn-secondary">Sauvegarder une citation</button>
+      {% endif %}
    {% else %}
     <a href="{{ path('app_login') }}" class="btn btn-outline-dark mt-5">Se connecter pour enregistrer des citations</a>
    {% endif %}  </form>
