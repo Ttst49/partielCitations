@@ -6,8 +6,8 @@ use App\Entity\Quote;
 use App\Repository\QuoteRepository;
 use App\service\KaamelottCitations;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,27 +28,29 @@ class CitationController extends AbstractController
 
 
 
-    #[Route("/user/addFavorite/{value}/{character}",name: "app_citation_addfavorite")]
-    public function addFavorite(QuoteRepository $repository, EntityManagerInterface $manager, $value = null, $character = null):Response{
+    #[Route("/user/addFavorite/",name: "app_citation_addfavorite")]
+    public function addFavorite(QuoteRepository $repository, EntityManagerInterface $manager, Request $request):Response{
 
-        $quote = $repository->findOneByCitation($value);
+        $quoteContent =$request->get("quote");
+        $character = $request->get("character");
 
+
+        $quote = $repository->findOneByCitation($quoteContent);
+
+
+        $counter = $quote->getCounter();
 
         if (!$quote) {
             $quote = new Quote();
-            $quote->setContent($value);
+            $quote->setContent($quoteContent);
             $quote->setCharacter($character);
-        }else{
-            $this->getUser()->addQuote($quote);
         }
 
+        $quote->setCounter($counter+1);
+        $quote->addFavoriteOf($this->getUser());
         $manager->persist($quote);
         $manager->flush();
 
-        $this->addFlash(
-            'notice',
-            'La citation est vôtre!'
-        );
 
         return $this->redirectToRoute("app_citation");
     }
@@ -67,6 +69,7 @@ class CitationController extends AbstractController
     public function removeFavorite(Quote $quote, EntityManagerInterface $manager):Response{
 
         $this->getUser()->removeQuote($quote);
+        $quote->setCounter($quote->getCounter()-1);
         $manager->flush();
 
 
@@ -77,25 +80,9 @@ class CitationController extends AbstractController
     #[Route("/showBestQuotes",name: "app_citation_showbestquotes")]
     public function showBestQuotes(QuoteRepository $repository):Response{
 
-        $quotes = $repository->findAll();
-        $higher = 0;
-        $second = 0;
-        $third = 0;
-        foreach ($quotes as $quote){
-            foreach ($quote->getFavoriteOf() as $user){
-                $actualNumber = $quote->getFavoriteOf()->count();
-                $actualQuote = $quote->getContent();
-                switch ($actualNumber){
-                    case ($actualNumber > $higher): $higher = $actualNumber; $higherQuote = $actualQuote; break;
-                    case ($actualNumber <= $higher && $actualNumber >= $second): $second = $actualNumber; $secondQuote = $actualQuote; break;
-                    case ($actualNumber <= $second && $actualNumber >= $third): $third = $actualNumber; $thirdQuote = $actualQuote;
-                }
-            }
-        }
-
-        $bestQuotes = [$higher=>$higherQuote,$second=>$secondQuote,$third=>$thirdQuote];
+        $quotes = $repository->findBy(array(),["counter"=>"DESC"],3,null);
         return $this->render("citation/bestQuotes.html.twig",[
-            "bestQuotes"=>$bestQuotes
+                "bestQuotes" => $quotes
         ]);
     }
 

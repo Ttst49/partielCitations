@@ -25,6 +25,10 @@ class Quote
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'quotes')]
     private Collection $favoriteOf;
 
+    #[ORM\Column]
+    private ?int $counter = null;
+
+
     public function __construct()
     {
         $this->favoriteOf = new ArrayCollection();
@@ -82,4 +86,17 @@ class Quote
 
         return $this;
     }
+
+    public function getCounter(): ?int
+    {
+        return $this->counter;
+    }
+
+    public function setCounter(int $counter): static
+    {
+        $this->counter = $counter;
+
+        return $this;
+    }
+
 }

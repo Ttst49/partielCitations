@@ -42,13 +42,13 @@ class QuoteRepository extends ServiceEntityRepository
 //    /**
 //     * @return Quote[] Returns an array of Quote objects
 //     */
-//    public function findByCitation($value): array
+//    public function countTotalUse(): array
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.content = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
+//            ->setParameter()
+//            ->orderBy('c.favoriteOf', 'DESC')
+//            ->setMaxResults(3)
 //            ->getQuery()
 //            ->getResult()
 //        ;

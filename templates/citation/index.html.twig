@@ -4,14 +4,18 @@
 
 {% block body %}
 
-    {{ citation.citation.citation }} <br>
-    <a href="{{ path('app_citation') }}" class="mt-5 btn btn-primary">Charger une citation</a>
-    {% if app.user %}
-    <a href="{{ path('app_citation_addfavorite',{value:citation.citation.citation,character:citation.citation.infos.personnage}) }}" class="mt-5 btn btn-secondary">Sauvegarder une citation</a>
-    {% else %}
-        <a href="{{ path('app_login') }}" class="btn btn-outline-dark mt-5">Se connecter pour enregistrer des citations</a>
-    {% endif %}
 
-    <a href="{{ path('app_citation_showbestquotes') }}" class="btn btn-success">qqsq</a>
+
+    <form action="{{ path('app_citation_addfavorite') }}" method="post">
+        <p>{{ citation.citation.citation }}</p>
+        <input type="hidden" name="quote" value="{{ citation.citation.citation }}">
+        <input type="hidden" name="character" value="{{ citation.citation.infos.personnage }}">
+        <a href="{{ path('app_citation') }}" class="mt-5 btn btn-primary">Charger une citation</a>
+        {% if app.user %}
+            <button type="submit"  class="mt-5 btn btn-secondary">Sauvegarder une citation</button>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-outline-dark mt-5">Se connecter pour enregistrer des citations</a>
+        {% endif %}
+    </form>
 
 {% endblock %}

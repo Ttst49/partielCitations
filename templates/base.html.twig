@@ -23,7 +23,7 @@
                 <ul class="navbar-nav me-auto">
                     {% if app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">Log Out</a>
+                        <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_citation_indexfavorites') }}">Favoris enregistrés</a>
@@ -35,12 +35,15 @@
                         {% endif %}
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">Log In</a>
+                        <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_register') }}">Register</a>
+                        <a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
                     </li>
                     {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_citation_showbestquotes') }}">Les plus enregistrées</a>
+                    </li>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-sm-2" type="search" placeholder="Search">

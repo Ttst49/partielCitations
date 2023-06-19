@@ -57,6 +57,8 @@ class AdminController extends AbstractController
     #[Route("/remove/{id},",name: "app_admin_adminremove")]
     public function adminRemove(Quote $quote, EntityManagerInterface $manager):Response{
 
+
+        $quote->setCounter($quote->getCounter()-1);
         $manager->remove($quote);
         $manager->flush();
 

@@ -5,7 +5,16 @@
 {% block body %}
 
  {% for quote in bestQuotes %}
-  <p class="border border-black">{{ quote }}</p>
+  <form action="{{ path('app_citation_addfavorite') }}" method="post">
+   <p>{{ quote.content }}</p>
+   <p>Nombre d'enregistrements: {{ quote.counter }}</p>
+   <input type="hidden" name="quote" value="{{ quote.content }}">
+   <input type="hidden" name="character" value="{{ quote.character }}">
+   {% if app.user %}
+    <button type="submit"  class="mt-5 btn btn-secondary">Sauvegarder une citation</button>
+   {% else %}
+    <a href="{{ path('app_login') }}" class="btn btn-outline-dark mt-5">Se connecter pour enregistrer des citations</a>
+   {% endif %}  </form>
  {% endfor %}
 
 {% endblock %}
