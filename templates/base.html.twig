@@ -30,7 +30,7 @@
                     </li>
                         {% if "ROLE_ADMIN" in app.user.roles %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('') }}">Gestion utilisateurs</a>
+                                <a class="nav-link" href="{{ path('app_admin_users') }}">Gestion utilisateurs</a>
                             </li>
                         {% endif %}
                     {% else %}

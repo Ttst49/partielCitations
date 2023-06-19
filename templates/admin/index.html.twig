@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+
+
+
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Nom Utilisateur</th>
+            <th scope="col">Role</th>
+            <th scope="col">Citations</th>
+            <th scope="col">id</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            {% if "ROLE_ADMIN" in user.roles %}
+            <tr class="table-dark">
+                <th scope="row">{{ user.username }}</th>
+                <td><a href="{{ path('app_user_demote',{id:user.id}) }}" class="btn btn-outline-danger">Demote</a></td>
+                <td><a href="{{ path('app_admin_showuserfavorites',{id:user.id}) }}" class="btn btn-info">Voir ses citations favorites</a></td>
+                <td>{{ user.id }}</td>
+            </tr>
+            {% else %}
+                <tr class="table-info">
+                    <th scope="row">{{ user.username }}</th>
+                    <td><a href="{{ path('app_user_promote',{id:user.id}) }}" class="btn btn-outline-success">Promote</a></td>
+                    <td><a href="{{ path('app_admin_showuserfavorites',{id:user.id}) }}" class="btn btn-info">Voir ses citations favorites</a></td>
+                    <td>{{ user.id }}</td>
+                </tr>
+                {% endif %}
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

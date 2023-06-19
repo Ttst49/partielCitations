@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kaamelott{% endblock %}
+
+{% block body %}
+
+ {% for quote in bestQuotes %}
+  <p class="border border-black">{{ quote }}</p>
+ {% endfor %}
+
+{% endblock %}

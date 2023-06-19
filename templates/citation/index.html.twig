@@ -1,14 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CitationController!{% endblock %}
+{% block title %}Kaamelott{% endblock %}
 
 {% block body %}
 
     {{ citation.citation.citation }} <br>
     <a href="{{ path('app_citation') }}" class="mt-5 btn btn-primary">Charger une citation</a>
     {% if app.user %}
-    <a href="{{ path('app_citation_addfavorite',{value:citation.citation.citation,character:citation.citation.infos.personnage}) }}" class="btn btn-secondary">Sauvegarder une citation</a>
+    <a href="{{ path('app_citation_addfavorite',{value:citation.citation.citation,character:citation.citation.infos.personnage}) }}" class="mt-5 btn btn-secondary">Sauvegarder une citation</a>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="btn btn-outline-dark mt-5">Se connecter pour enregistrer des citations</a>
     {% endif %}
 
+    <a href="{{ path('app_citation_showbestquotes') }}" class="btn btn-success">qqsq</a>
 
 {% endblock %}

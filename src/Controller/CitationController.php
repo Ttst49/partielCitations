@@ -31,10 +31,16 @@ class CitationController extends AbstractController
     #[Route("/user/addFavorite/{value}/{character}",name: "app_citation_addfavorite")]
     public function addFavorite(QuoteRepository $repository, EntityManagerInterface $manager, $value = null, $character = null):Response{
 
-        $quote = new Quote();
-        $quote->setContent($value);
-        $quote->setCharacter($character);
-        $quote->addFavoriteOf($this->getUser());
+        $quote = $repository->findOneByCitation($value);
+
+
+        if (!$quote) {
+            $quote = new Quote();
+            $quote->setContent($value);
+            $quote->setCharacter($character);
+        }else{
+            $this->getUser()->addQuote($quote);
+        }
 
         $manager->persist($quote);
         $manager->flush();
@@ -65,6 +71,32 @@ class CitationController extends AbstractController
 
 
         return $this->redirectToRoute("app_citation_indexfavorites");
+    }
+
+
+    #[Route("/showBestQuotes",name: "app_citation_showbestquotes")]
+    public function showBestQuotes(QuoteRepository $repository):Response{
+
+        $quotes = $repository->findAll();
+        $higher = 0;
+        $second = 0;
+        $third = 0;
+        foreach ($quotes as $quote){
+            foreach ($quote->getFavoriteOf() as $user){
+                $actualNumber = $quote->getFavoriteOf()->count();
+                $actualQuote = $quote->getContent();
+                switch ($actualNumber){
+                    case ($actualNumber > $higher): $higher = $actualNumber; $higherQuote = $actualQuote; break;
+                    case ($actualNumber <= $higher && $actualNumber >= $second): $second = $actualNumber; $secondQuote = $actualQuote; break;
+                    case ($actualNumber <= $second && $actualNumber >= $third): $third = $actualNumber; $thirdQuote = $actualQuote;
+                }
+            }
+        }
+
+        $bestQuotes = [$higher=>$higherQuote,$second=>$secondQuote,$third=>$thirdQuote];
+        return $this->render("citation/bestQuotes.html.twig",[
+            "bestQuotes"=>$bestQuotes
+        ]);
     }
 
 }
