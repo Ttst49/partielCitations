@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CitationController!{% endblock %}
+
+{% block body %}
+
+    {{ citation.citation.citation }}
+    <a href="{{ path('app_citation') }}" class="btn btn-primary">Charger une citation</a>
+
+
+{% endblock %}
