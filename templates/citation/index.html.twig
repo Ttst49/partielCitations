@@ -4,8 +4,11 @@
 
 {% block body %}
 
-    {{ citation.citation.citation }}
-    <a href="{{ path('app_citation') }}" class="btn btn-primary">Charger une citation</a>
+    {{ citation.citation.citation }} <br>
+    <a href="{{ path('app_citation') }}" class="mt-5 btn btn-primary">Charger une citation</a>
+    {% if app.user %}
+    <a href="{{ path('app_citation_addfavorite',{value:citation.citation.citation,character:citation.citation.infos.personnage}) }}" class="btn btn-secondary">Sauvegarder une citation</a>
+    {% endif %}
 
 
 {% endblock %}

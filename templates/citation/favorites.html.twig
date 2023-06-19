@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Citations sauvegardées{% endblock %}
+
+{% block body %}
+
+    {% for citation in citations %}
+        {{ citation.content }} <br>
+        {{ citation.character }} <br>
+        {{ citation.id }}
+        <a href="{{ path('app_citation_removefavorite',{id:citation.id}) }}" class="btn btn-danger">Supprimer cette citation?</a>
+        <hr>
+        <br>
+    {% endfor %}
+
+{% endblock %}
