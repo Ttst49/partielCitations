@@ -89,15 +89,5 @@ class CitationController extends AbstractController
         ]);
     }
 
-    #[Route("/api/login/connected")]
-    public function getFirstInfo(UserRepository $repository):Response{
-
-        $user = $this->getUser();
-
-        $infos = $repository->findByExampleField($user);
-
-
-        return $this->json($infos,200,[],["groups"=>"api"]);
-    }
 
 }
