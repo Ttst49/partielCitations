@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Quote;
 use App\Repository\QuoteRepository;
+use App\Repository\UserRepository;
 use App\service\KaamelottCitations;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +39,9 @@ class CitationController extends AbstractController
         $quote = $repository->findOneByCitation($quoteContent);
 
 
-        $counter = $quote->getCounter();
+        if ($counter = null){
+            $counter = 0;
+        }
 
         if (!$quote) {
             $quote = new Quote();
@@ -84,6 +87,17 @@ class CitationController extends AbstractController
         return $this->render("citation/bestQuotes.html.twig",[
                 "bestQuotes" => $quotes
         ]);
+    }
+
+    #[Route("/api/login/connected")]
+    public function getFirstInfo(UserRepository $repository):Response{
+
+        $user = $this->getUser();
+
+        $infos = $repository->findByExampleField($user);
+
+
+        return $this->json($infos,200,[],["groups"=>"api"]);
     }
 
 }

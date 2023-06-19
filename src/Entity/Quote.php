@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: QuoteRepository::class)]
 class Quote
@@ -14,19 +15,22 @@ class Quote
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("api")]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups("api")]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups("api")]
     private ?string $character = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'quotes')]
     private Collection $favoriteOf;
 
     #[ORM\Column]
-    private ?int $counter = null;
+    private ?int $counter = 0;
 
 
     public function __construct()
